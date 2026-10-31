@@ -1,0 +1,26 @@
+flowchart LR
+  subgraph clients["Browsers (same origin, no build step)"]
+    WS["Oculus Workspace<br/>employees"]
+    CO["Oculus Console<br/>analysts"]
+    DOC["Swagger UI<br/>and Postman"]
+  end
+
+  subgraph app["Flask application"]
+    SEC["Security layer<br/>JWT cookie + CSRF, CSP,<br/>lockout, role checks"]
+    RT["Thin routes<br/>auth, access, events,<br/>incidents, overview"]
+    SIM["flask seed / simulate<br/>history and live attacks"]
+    ING["ingest.record_event()<br/>single entry point"]
+    RISK["Risk scoring<br/>with daily decay"]
+    ENG["Detection engine<br/>6 MITRE-tagged rules"]
+    INC["Incident service<br/>dedupe, evidence,<br/>timeline, workflow"]
+  end
+
+  DB[("PostgreSQL 16<br/>events, incidents, evidence,<br/>activity, users, resources")]
+
+  WS --> SEC
+  CO -->|"polls every 3 s"| SEC
+  DOC --> SEC
+  SEC --> RT --> ING
+  SIM --> ING
+  ING --> RISK --> DB
+  ING --> ENG --> INC --> DB

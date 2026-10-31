@@ -1,0 +1,856 @@
+{
+  "info": {
+    "name": "Oculus API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "SIEM with honeypot-based insider-threat detection.\n\n**Try it:** call `POST /api/login`, copy the `token` from the response, press **Authorize** and paste it. Seeded demo accounts are listed in the README (`imran.shah@oculus.com` is an analyst).\n\n**Auth:** a JWT, as a Bearer token or an httpOnly cookie. Cookie writes also need an `X-CSRF-Token` header equal to the `oculus_csrf` cookie; Bearer clients do not.\n\n**Errors:** always `{\"success\": false, \"message\": \"...\"}`."
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "item": [
+    {
+      "name": "Auth",
+      "description": "",
+      "item": [
+        {
+          "name": "Sign in as analyst",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Signed in\", () => pm.response.to.have.status(200));",
+                  "const body = pm.response.json();",
+                  "pm.test(\"Response carries a token\", () => pm.expect(body.token).to.be.a(\"string\"));",
+                  "pm.environment.set(\"token\", body.token);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "Run this first for the Console and Admin folders. Saves the JWT to {{token}}.",
+            "url": {
+              "raw": "{{baseUrl}}/api/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "login"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"{{adminUser}}\",\n  \"password\": \"{{adminPassword}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Sign in as employee",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Signed in\", () => pm.response.to.have.status(200));",
+                  "const body = pm.response.json();",
+                  "pm.test(\"Response carries a token\", () => pm.expect(body.token).to.be.a(\"string\"));",
+                  "pm.environment.set(\"token\", body.token);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "Run this first for the Workspace folder. Saves the JWT to {{token}}.",
+            "url": {
+              "raw": "{{baseUrl}}/api/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "login"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"{{employeeUser}}\",\n  \"password\": \"{{employeePassword}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Sign in (custom body)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "description": "Returns a JWT and sets two cookies: `oculus_token` (httpOnly, SameSite=Strict) and `oculus_csrf`. API clients can ignore the cookies and send `Authorization: Bearer <token>` (no CSRF header needed). Five failures from one address for one account, or 20 from one address in 15 minutes, lock that address out (429).",
+            "url": {
+              "raw": "{{baseUrl}}/api/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "login"
+              ],
+              "query": []
+            },
+            "auth": {
+              "type": "noauth"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"imran.shah@oculus.com\",\n  \"password\": \"Oculus#Admin26\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Signed in\", () => pm.response.to.have.status(200));",
+                  "const body = pm.response.json();",
+                  "pm.test(\"Response carries a token\", () => pm.expect(body.token).to.be.a(\"string\"));",
+                  "pm.environment.set(\"token\", body.token);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Current user",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "description": "",
+            "url": {
+              "raw": "{{baseUrl}}/api/me",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "me"
+              ],
+              "query": []
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status is 200\", () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Demo sign-ins",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "description": "Fictional seeded accounts for one-click demo sign-in. Returns `demo: false` and an empty list unless the server runs in demo mode.",
+            "url": {
+              "raw": "{{baseUrl}}/api/demo-accounts",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "demo-accounts"
+              ],
+              "query": []
+            },
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status is 200\", () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Sign out",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "description": "Clears the auth cookies. Records a logout event.",
+            "url": {
+              "raw": "{{baseUrl}}/api/logout",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "logout"
+              ],
+              "query": []
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status is 200\", () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Workspace",
+      "description": "What employees use.",
+      "item": [
+        {
+          "name": "List files",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "description": "Every file, categorised for the caller's role. The role comes from the token, never from the request.",
+            "url": {
+              "raw": "{{baseUrl}}/api/resources",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "resources"
+              ],
+              "query": []
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status is 200\", () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Open a file",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "description": "Decides, logs and scores the access. Denied access adds risk points; opening a decoy adds more and raises an incident, while the caller still sees a normal success.",
+            "url": {
+              "raw": "{{baseUrl}}/api/access",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "access"
+              ],
+              "query": []
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"resourceName\": \"Firewall.config\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status is 200\", () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Recently opened files",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "description": "Distinct files the caller opened (denied attempts excluded), newest first.",
+            "url": {
+              "raw": "{{baseUrl}}/api/my/recent",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "my",
+                "recent"
+              ],
+              "query": []
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status is 200\", () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Console",
+      "description": "What security analysts use. Admin only.",
+      "item": [
+        {
+          "name": "Dashboard aggregates",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "description": "Everything the Overview page needs in one call: KPIs with the prior-period value, a severity timeline, MITRE techniques, top accounts, top attacking sources and the highest insider risk.\n\n**Admin only.**",
+            "url": {
+              "raw": "{{baseUrl}}/api/overview",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "overview"
+              ],
+              "query": [
+                {
+                  "key": "hours",
+                  "value": "24",
+                  "disabled": true,
+                  "description": "Window. Anything other than 1, 6, 24 or 168 falls back to 24."
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status is 200\", () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Search security events",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "description": "Newest first. `since_id` returns only newer events, oldest first: that is what the live view polls. `before_id` pages backwards.\n\n**Admin only.**",
+            "url": {
+              "raw": "{{baseUrl}}/api/events?limit=100",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "events"
+              ],
+              "query": [
+                {
+                  "key": "type",
+                  "value": "login_success,login_failed",
+                  "disabled": true,
+                  "description": "Event types. Comma-separated."
+                },
+                {
+                  "key": "outcome",
+                  "value": "success,failure",
+                  "disabled": true,
+                  "description": "Outcomes. Comma-separated."
+                },
+                {
+                  "key": "severity",
+                  "value": "info,low",
+                  "disabled": true,
+                  "description": "Severities. Comma-separated."
+                },
+                {
+                  "key": "user",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Exact username."
+                },
+                {
+                  "key": "ip",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Exact IP address (400 if invalid)."
+                },
+                {
+                  "key": "hours",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Only the last N hours (max 720)."
+                },
+                {
+                  "key": "q",
+                  "value": "",
+                  "disabled": true,
+                  "description": "Free text over username, file name and IP."
+                },
+                {
+                  "key": "limit",
+                  "value": "100",
+                  "disabled": false,
+                  "description": ""
+                },
+                {
+                  "key": "since_id",
+                  "value": "",
+                  "disabled": true,
+                  "description": ""
+                },
+                {
+                  "key": "before_id",
+                  "value": "",
+                  "disabled": true,
+                  "description": ""
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status is 200\", () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "List incidents",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "description": "**Admin only.**",
+            "url": {
+              "raw": "{{baseUrl}}/api/incidents?limit=200",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "incidents"
+              ],
+              "query": [
+                {
+                  "key": "status",
+                  "value": "open,investigating",
+                  "disabled": true,
+                  "description": "Statuses. Comma-separated."
+                },
+                {
+                  "key": "severity",
+                  "value": "info,low",
+                  "disabled": true,
+                  "description": "Severities. Comma-separated."
+                },
+                {
+                  "key": "limit",
+                  "value": "200",
+                  "disabled": false,
+                  "description": ""
+                }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status is 200\", () => pm.response.to.have.status(200));",
+                  "const list = pm.response.json();",
+                  "if (list.length) pm.environment.set(\"incidentId\", list[0].id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Get an incident",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "description": "**Admin only.**",
+            "url": {
+              "raw": "{{baseUrl}}/api/incidents/{{incidentId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "incidents",
+                "{{incidentId}}"
+              ],
+              "query": []
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status is 200\", () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Change status",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "description": "Allowed moves: open -> investigating -> resolved, and reopening. Every change is written to the incident's activity trail. A closed incident cannot be reopened while another open incident exists for the same subject (409).\n\n**Admin only.**",
+            "url": {
+              "raw": "{{baseUrl}}/api/incidents/{{incidentId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "incidents",
+                "{{incidentId}}"
+              ],
+              "query": []
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"investigating\",\n  \"note\": \"Reviewing the source address.\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status is 200\", () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Correlated timeline",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "description": "The evidence events that raised the incident, the analyst activity trail, and (as `linked: false`) nearby events from the same subject for context.\n\n**Admin only.**",
+            "url": {
+              "raw": "{{baseUrl}}/api/incidents/{{incidentId}}/timeline",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "incidents",
+                "{{incidentId}}",
+                "timeline"
+              ],
+              "query": []
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status is 200\", () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Add an analyst note",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "description": "**Admin only.**",
+            "url": {
+              "raw": "{{baseUrl}}/api/incidents/{{incidentId}}/notes",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "incidents",
+                "{{incidentId}}",
+                "notes"
+              ],
+              "query": []
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"note\": \"Confirmed with the user. Password reset requested.\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status is 201\", () => pm.response.to.have.status(201));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Detection catalogue",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "description": "Every detection rule with its MITRE ATT&CK mapping and how many incidents it has raised.\n\n**Admin only.**",
+            "url": {
+              "raw": "{{baseUrl}}/api/rules",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "rules"
+              ],
+              "query": []
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status is 200\", () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Decoy inventory",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "description": "Every decoy file, how often it was opened and by whom last.\n\n**Admin only.**",
+            "url": {
+              "raw": "{{baseUrl}}/api/honeypots",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "honeypots"
+              ],
+              "query": []
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status is 200\", () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Admin",
+      "description": "User management. Admin only.",
+      "item": [
+        {
+          "name": "List employees",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "description": "Includes current (decayed) risk score and last sign-in. Password hashes are never returned.\n\n**Admin only.**",
+            "url": {
+              "raw": "{{baseUrl}}/api/employees",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "employees"
+              ],
+              "query": []
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status is 200\", () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Add an employee",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "description": "Creates an employee (role is a department). Admin accounts cannot be created through the API.\n\n**Admin only.**",
+            "url": {
+              "raw": "{{baseUrl}}/api/employees",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "employees"
+              ],
+              "query": []
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fullName\": \"New Hire\",\n  \"username\": \"new.hire.{{$timestamp}}@oculus.com\",\n  \"password\": \"Passw0rd!2026\",\n  \"employeeId\": \"OC-{{$randomInt}}\",\n  \"role\": \"HR\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status is 201\", () => pm.response.to.have.status(201));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

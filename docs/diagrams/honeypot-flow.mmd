@@ -1,0 +1,21 @@
+sequenceDiagram
+  autonumber
+  actor E as Employee
+  participant W as Workspace
+  participant A as API /api/access
+  participant I as ingest.record_event
+  participant R as Risk scoring
+  participant D as Detection engine
+  participant DB as PostgreSQL
+  actor S as Analyst (Console)
+
+  E->>W: opens "Passwords.txt" in Shared Drive
+  W->>A: POST /api/access (JWT cookie + CSRF)
+  A->>I: honeypot_access event
+  I->>DB: store event (UTC, source IP)
+  I->>R: +50 insider-risk points
+  I->>D: evaluate rules for this event
+  D->>DB: R-HP-001 opens incident, links evidence
+  A-->>W: file opens normally, no warning
+  S->>DB: next poll sees the new event and incident
+  Note over E,S: The employee is never told a decoy exists or what their risk score is

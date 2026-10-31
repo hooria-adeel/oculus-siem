@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sign in · Oculus</title>
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/css/tokens.css">
+  <link rel="stylesheet" href="/css/base.css">
+  <link rel="stylesheet" href="/css/login.css">
+</head>
+<body class="theme-workspace">
+  <div class="split">
+    <aside class="art theme-console" aria-hidden="true">
+      <div class="art-brand"><img src="/assets/favicon.svg" alt="" width="28" height="28"><span>Oculus</span></div>
+      <div class="iris">
+        <i class="ring r1"></i><i class="ring r2"></i><i class="ring r3"></i><i class="ring r4"></i>
+        <i class="ticks"></i><i class="cross"></i><i class="sweep"></i>
+        <i class="blip b1"></i><i class="blip b2"></i><i class="blip b3"></i><i class="blip b4"></i><i class="blip alert"></i>
+        <svg class="pupil" viewBox="0 0 32 32" width="64" height="64"><path d="M3 16s5-9 13-9 13 9 13 9-5 9-13 9S3 16 3 16Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><circle cx="16" cy="16" r="4.4" fill="currentColor"/></svg>
+      </div>
+      <div class="art-copy">
+        <h2>One sign-in. The right workspace.</h2>
+        <p>Analysts land in the Console. Everyone else lands in their Workspace.</p>
+      </div>
+    </aside>
+
+    <main class="panel">
+      <div class="panel-in">
+        <div class="logo"><img src="/assets/mark-light.svg" alt="" width="32" height="32"><span>Oculus</span></div>
+        <form id="form" novalidate>
+          <h1>Welcome back</h1>
+          <p class="muted lead">Sign in with your work email.</p>
+          <div class="field"><label for="u">Work email</label>
+            <input class="input" id="u" name="username" type="email" autocomplete="username" required autofocus placeholder="name@oculus.com"></div>
+          <div class="field"><label for="p">Password</label>
+            <div class="pw"><input class="input" id="p" name="password" type="password" autocomplete="current-password" required>
+              <button type="button" id="toggle" class="btn ghost icon-only" aria-label="Show password" title="Show password"></button></div>
+            <span id="caps" class="hint caps hidden">Caps Lock is on</span></div>
+          <p id="err" class="error-text hidden" role="alert"></p>
+          <button class="btn primary" id="go" type="submit">Sign in</button>
+        </form>
+        <section id="demo" class="demo hidden" aria-labelledby="demo-title">
+          <div class="demo-head"><h2 id="demo-title">Try the demo</h2><span>Fictional data. One click signs you in.</span></div>
+          <div id="demo-list" class="demo-list"></div>
+        </section>
+        <p class="foot">Trouble signing in? Contact your IT administrator.</p>
+      </div>
+    </main>
+  </div>
+  <script type="module" src="/js/login.js"></script>
+</body>
+</html>

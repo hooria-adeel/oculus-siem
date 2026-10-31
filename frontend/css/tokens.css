@@ -1,0 +1,58 @@
+/* Oculus design tokens. Two themes share one set of component rules (base.css). */
+@font-face { font-family: "Inter"; font-weight: 100 900; font-display: swap;
+  src: url("../assets/fonts/inter-latin-wght-normal.woff2") format("woff2"); }
+@font-face { font-family: "JetBrains Mono"; font-weight: 100 800; font-display: swap;
+  src: url("../assets/fonts/jetbrains-mono-latin-wght-normal.woff2") format("woff2"); }
+
+:root {
+  --font-ui: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "Cascadia Mono", Consolas, monospace;
+  --r-1: 3px; --r-2: 6px; --r-3: 10px;
+  --good: #0ca30c;
+}
+
+/* ---- Console: dark, dense ---- */
+.theme-console {
+  color-scheme: dark;
+  --canvas: #0d1116; --panel: #141a21; --raised: #19212b; --sunken: #10151b;
+  --rule: #222c38; --rule-strong: #2e3a49;
+  --text: #d6dce4; --text-2: #9aa7b6; --text-3: #75828f;
+  --accent: #3bb3a6; --accent-ink: #06201d; --accent-soft: rgba(59, 179, 166, .14);
+  --hover: rgba(255, 255, 255, .04); --select: rgba(59, 179, 166, .10);
+  --danger: #e66767; --shadow: 0 12px 32px rgba(0, 0, 0, .5);
+  --fs-base: 13px; --row-h: 30px;
+  /* Severity colours: validated for the dark panel (scripts/validate_palette.js, all checks pass). */
+  --sev-critical: #d03b3b; --sev-high: #c98500; --sev-medium: #3987e5; --sev-low: #199e70; --sev-info: #7d8793;
+  --series-1: #3987e5;
+  --cat-1: #3987e5; --cat-2: #d95926; --cat-3: #199e70; --cat-4: #c98500; --cat-5: #d55181; --cat-other: #7d8793;
+}
+
+/* ---- Console, light variant (toggle in the top bar; choice is remembered). Same density, different surfaces. ---- */
+html[data-theme="light"] .theme-console {
+  color-scheme: light;
+  --canvas: #eef1f5; --panel: #ffffff; --raised: #ffffff; --sunken: #f4f6f9;
+  --rule: #e1e6ed; --rule-strong: #ccd3de;
+  --text: #1b2430; --text-2: #4b5766; --text-3: #6a7584;
+  --accent: #0f766e; --accent-ink: #ffffff; --accent-soft: rgba(15, 118, 110, .12);
+  --hover: rgba(15, 30, 50, .045); --select: rgba(15, 118, 110, .09);
+  --danger: #c62f2f; --shadow: 0 10px 28px rgba(20, 30, 45, .16);
+  /* Light surface: darker steps so every mark keeps 3:1 against white. CVD gap is in the 6-8 band, so the chart
+     also carries gaps between segments, an icon + label on every severity, and a table view. */
+  --sev-critical: #c62f2f; --sev-high: #b87500; --sev-medium: #2a78d6; --sev-low: #00855a; --sev-info: #6a7584;
+  --series-1: #2a78d6;
+  --cat-1: #2a78d6; --cat-2: #eb6834; --cat-3: #1baf7a; --cat-4: #eda100; --cat-5: #e87ba4; --cat-other: #6a7584;
+}
+
+/* ---- Workspace: light, calm ---- */
+.theme-workspace {
+  color-scheme: light;
+  --canvas: #f3f5f8; --panel: #ffffff; --raised: #ffffff; --sunken: #eef1f5;
+  --rule: #e1e5eb; --rule-strong: #cfd5de;
+  --text: #1f2733; --text-2: #5b6676; --text-3: #7b8696;
+  --accent: #1d5fd1; --accent-ink: #ffffff; --accent-soft: #e6eefc;
+  --hover: #f0f3f8; --select: #e6eefc;
+  --danger: #c0392b; --shadow: 0 8px 24px rgba(31, 39, 51, .16);
+  --fs-base: 14px; --row-h: 44px;
+  --sev-critical: #c62f2f; --sev-high: #b87500; --sev-medium: #2a78d6; --sev-low: #00855a; --sev-info: #6a7584;
+  --series-1: #2a78d6;
+}

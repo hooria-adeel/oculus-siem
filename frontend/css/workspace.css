@@ -1,0 +1,55 @@
+.ws { display: grid; grid-template-columns: 248px minmax(0, 1fr); grid-template-rows: 60px minmax(0, 1fr); height: 100vh; background: var(--canvas); }
+.ws-top { grid-column: 1 / 3; display: flex; align-items: center; gap: 16px; padding: 0 16px 0 20px; background: var(--canvas); }
+.ws-brand { display: flex; align-items: center; gap: 10px; width: 216px; font-size: 18px; font-weight: 500; letter-spacing: -.01em; color: var(--text-2); }
+.ws-brand b { font-weight: 650; color: var(--text); } .ws-brand img { width: 30px; height: 30px; }
+.ws-search { position: relative; flex: 1; max-width: 640px; }
+.ws-search .icon { position: absolute; left: 14px; top: 13px; color: var(--text-2); }
+.ws-search input { width: 100%; height: 46px; border-radius: 23px; border: 1px solid transparent; background: #e9eef6; padding: 0 20px 0 44px; font-size: 15px; outline: none; }
+.ws-search input:focus { background: var(--panel); border-color: var(--rule-strong); box-shadow: 0 1px 6px rgba(31, 39, 51, .15); }
+.ws-user { margin-left: auto; position: relative; }
+.ws-avatar { width: 38px; height: 38px; border-radius: 50%; border: 0; background: var(--accent); color: #fff; font-weight: 600; font-size: 14px; cursor: pointer; }
+.ws-menu { position: absolute; right: 0; top: 46px; width: 280px; background: var(--panel); border-radius: 14px; box-shadow: var(--shadow); border: 1px solid var(--rule); padding: 16px; z-index: 20; display: grid; gap: 12px; }
+.ws-menu .who { display: flex; gap: 12px; align-items: center; } .ws-menu .ws-avatar { width: 44px; height: 44px; cursor: default; }
+.ws-menu b { display: block; } .ws-menu span { color: var(--text-2); font-size: 13px; word-break: break-all; }
+
+.ws-nav { padding: 6px 12px 12px 12px; display: flex; flex-direction: column; gap: 2px; overflow: auto; }
+.ws-nav h4 { font-size: 12.5px; font-weight: 600; color: var(--text-2); padding: 16px 16px 6px; }
+.ws-nav a { display: flex; align-items: center; gap: 14px; height: 38px; padding: 0 16px; border-radius: 19px; color: var(--text); text-decoration: none; }
+.ws-nav a:hover { background: #e4e9f1; text-decoration: none; } .ws-nav a.active { background: #d3e3fd; font-weight: 600; }
+.ws-nav a .icon { color: var(--text-2); } .ws-nav a.active .icon { color: #0b3d91; }
+.ws-nav a small { margin-left: auto; color: var(--text-3); font-size: 12px; }
+
+.ws-main { background: var(--panel); border-radius: 18px 0 0 0; margin: 0; overflow: auto; padding: 22px 28px 40px; min-width: 0; }
+.ws-main h1 { font-size: 22px; font-weight: 450; letter-spacing: -.01em; margin-bottom: 18px; }
+.ws-main h2 { font-size: 14px; font-weight: 600; margin: 24px 0 12px; color: var(--text); }
+.crumb { display: flex; align-items: center; gap: 6px; font-size: 20px; margin-bottom: 18px; } .crumb a { color: var(--text-2); } .crumb .icon { color: var(--text-3); }
+
+.cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; }
+.fcard { border: 1px solid var(--rule); border-radius: 14px; overflow: hidden; background: var(--panel); cursor: pointer; text-align: left; padding: 0; }
+.fcard:hover { background: var(--hover); box-shadow: 0 1px 3px rgba(31, 39, 51, .12); } .fcard .thumb { height: 108px; background: #f1f4f9; display: grid; place-items: center; }
+.fcard .thumb .icon { width: 44px; height: 44px; } .fcard .cap { display: flex; align-items: center; gap: 10px; padding: 11px 14px; }
+.fcard .cap div { min-width: 0; } .fcard .cap b { display: block; font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; } .fcard .cap span { font-size: 12px; color: var(--text-2); }
+.folders { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; }
+.folder { display: flex; align-items: center; gap: 12px; height: 52px; padding: 0 16px; border: 1px solid var(--rule); border-radius: 14px; background: #f7f9fc; cursor: pointer; text-align: left; font-weight: 500; }
+.folder:hover { background: #eef2f8; } .folder .icon { color: var(--text-2); } .folder small { margin-left: auto; color: var(--text-3); font-weight: 400; }
+
+.ft-pdf { color: #c5392c; } .ft-sheet { color: #1e8e3e; } .ft-doc { color: #2a62d0; } .ft-code { color: #6b4fbb; } .ft-other { color: #5b6676; }
+.ws .tbl th { background: var(--panel); color: var(--text-2); font-weight: 500; font-size: 13px; height: 40px; border-bottom: 1px solid var(--rule); cursor: pointer; user-select: none; }
+.ws .tbl th .icon { width: 13px; height: 13px; vertical-align: -2px; margin-left: 4px; }
+.ws .tbl td { height: 48px; font-size: 14px; color: var(--text-2); } .ws .tbl td:first-child { color: var(--text); }
+.ws .tbl tbody tr { cursor: pointer; } .ws .tbl tbody tr:hover { background: #f1f4f9; }
+.fname { display: flex; align-items: center; gap: 14px; } .fname .lock { color: var(--text-3); }
+.ws .empty { padding: 60px 16px; }
+
+.viewer { border: 0; border-radius: 16px; padding: 0; width: min(880px, 94vw); height: min(82vh, 760px); box-shadow: var(--shadow); background: #eef1f6; color: var(--text); }
+.viewer[open] { display: flex; flex-direction: column; } .viewer::backdrop { background: rgba(31, 39, 51, .5); }
+.viewer-head { display: flex; align-items: center; gap: 12px; height: 60px; padding: 0 12px 0 20px; background: var(--panel); border-bottom: 1px solid var(--rule); flex: none; }
+.viewer-head b { font-weight: 500; font-size: 16px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; } .viewer-head .spacer { flex: 1; }
+.viewer-body { overflow: auto; padding: 28px; flex: 1; display: flex; justify-content: center; }
+.page { background: #fff; width: min(720px, 100%); min-height: 100%; padding: 56px 64px; box-shadow: 0 1px 3px rgba(31, 39, 51, .14); font-size: 15px; line-height: 1.7; white-space: pre-wrap; overflow-wrap: anywhere; }
+.page.code { font-family: var(--font-mono); font-size: 13px; line-height: 1.6; }
+.denied { margin: auto; text-align: center; display: grid; gap: 10px; justify-items: center; max-width: 420px; }
+.denied .icon { width: 44px; height: 44px; color: var(--text-3); } .denied h3 { font-size: 20px; font-weight: 500; }
+.denied .warn { margin-top: 10px; background: #fff7e0; border: 1px solid #f0dc9a; color: #6b5200; border-radius: 10px; padding: 10px 14px; font-size: 13.5px; }
+
+@media (max-width: 860px) { .ws { grid-template-columns: 1fr; } .ws-nav { display: none; } .ws-top { grid-column: 1; } .ws-brand { width: auto; } .ws-brand b { display: none; } .ws-main { border-radius: 0; padding: 16px; } .page { padding: 28px 22px; } }

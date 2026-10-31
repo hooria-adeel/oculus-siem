@@ -1,11 +1,11 @@
 # Oculus: SIEM with honeypot-based insider-threat detection
 
-[![CI](https://github.com/YOUR-USERNAME/oculus-siem/actions/workflows/ci.yml/badge.svg)](https://github.com/YOUR-USERNAME/oculus-siem/actions/workflows/ci.yml)
+[![CI](https://github.com/hooria-adeel/oculus-siem/actions/workflows/ci.yml/badge.svg)](https://github.com/hooria-adeel/oculus-siem/actions/workflows/ci.yml)
 ![Python](https://img.shields.io/badge/python-3.13-blue)
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-336791)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
-<!-- Replace YOUR-USERNAME in the CI badge with your GitHub username. -->
+
 
 Oculus collects security events (sign-ins, file access), scores insider-threat risk per employee, plants **decoy files**
 that no legitimate user should ever open, correlates evidence into **incidents** mapped to MITRE ATT&CK, and gives analysts a
